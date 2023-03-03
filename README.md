@@ -27,3 +27,8 @@ To run the project locally, run the following CLI commands.
 pip install -r requirements.txt ## Install all the dependencies
 streamlit run main.py ## Run the main application
 ```
+
+*Your .env file should contain the following variables:*
+```python
+OPENAI_API_KEY=<YOUR API KEY>
+```
