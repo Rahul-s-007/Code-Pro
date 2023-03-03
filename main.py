@@ -1,10 +1,13 @@
 import openai
 
-import os
-from dotenv import load_dotenv
-load_dotenv()
-
+# import os
+# from dotenv import load_dotenv
+# load_dotenv()
 # openai.api_key = os.getenv("OPENAI_API_KEY")
+
+import streamlit as st
+from streamlit_ace import st_ace
+
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 def check_if_not_null(query):
@@ -73,9 +76,6 @@ def convert_lang_func(query,to_lang):
         return "No Input"
 
 # ---------------------------------------------------------------------------------------------
-
-import streamlit as st
-from streamlit_ace import st_ace
 
 st.set_page_config(page_icon=":computer:", layout = "wide")
 
