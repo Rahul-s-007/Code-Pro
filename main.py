@@ -16,62 +16,124 @@ def check_if_not_null(query):
     else:
         return 1
 
-def pass_prompt_to_ai(prompt,para):
+# ---------------------------------------------------------------------------------------------
+# Done
+def pass_prompt_to_ai_fix_error_func(prompt):
     response = openai.Completion.create(
         engine = "davinci-codex",
-        max_tokens = 1024,
+        max_tokens = 512,
         prompt = prompt,
-        temperature = para[0], # Risk taking ability - 0
-        top_p = para[1], # Influncing sampling - 1.0
-        frequency_penalty = para[2], # Penalties for repeated tokens - 0.0
-        presence_penalty = para[3], # Penalties for new words - 0.0
-        #stop = ['#'] # when to stop generating
+        temperature = 0, # Risk taking ability - 0
+        top_p = 1.0, # Influncing sampling - 1.0
+        frequency_penalty = 0.0, # Penalties for repeated tokens - 0.0
+        presence_penalty = 0.0, # Penalties for new words - 0.0
+        stop = ["###"] # when to stop generating
     )
     return response.choices[0].text
-    #return response.choices
 
-def fix_error_func(query):
+def fix_error_func(query,inp_lang):
     if(check_if_not_null(query)):
-        prompt_fn = "\nFix the syntax errors in the above code\n"
-        prompt = query + prompt_fn
+        prompt_fn = f"##### Fix bugs in the below code\n \n### Buggy {inp_lang}\n{query}\n \n### Fixed {inp_lang}"
+        prompt = prompt_fn
         print(prompt)
-        return pass_prompt_to_ai(prompt,[0,1.0,0.2,0.0])
+        return pass_prompt_to_ai_fix_error_func(prompt)
     else:
         return "No Input"
 
-def opt_code_func(query):
+# ---------------------------------------------------------------------------------------------
+# Done
+def pass_prompt_to_ai_opt_code_func(prompt):
+    response = openai.Completion.create(
+        engine = "davinci-codex",
+        max_tokens = 512,
+        prompt = prompt,
+        temperature = 0, # Risk taking ability - 0
+        top_p = 1.0, # Influncing sampling - 1.0
+        frequency_penalty = 0.0, # Penalties for repeated tokens - 0.0
+        presence_penalty = 0.0, # Penalties for new words - 0.0
+        stop = ["#"] # when to stop generating
+    )
+    return response.choices[0].text
+
+def opt_code_func(query,inp_lang):
     if(check_if_not_null(query)):
-        prompt_fn = "\nOptimize the above code and mention the optimizations"
-        prompt =  query + prompt_fn
+        prompt_fn = f"##### Improve the time complexity and memory usage for the below code\n   \n### Given {inp_lang} code\n{query}\n   \n### Improved code"
+        prompt = prompt_fn
         print(prompt)
-        return pass_prompt_to_ai(prompt,[0,1.0,0.2,0.0])
+        return pass_prompt_to_ai_opt_code_func(prompt)
     else:
         return "No Input"
+
+# ---------------------------------------------------------------------------------------------
+# Done
+def pass_prompt_to_ai_promt_to_code_func(prompt):
+    response = openai.Completion.create(
+        engine = "davinci-codex",
+        max_tokens = 512,
+        prompt = prompt,
+        temperature = 0, # Risk taking ability - 0
+        top_p = 1.0, # Influncing sampling - 1.0
+        frequency_penalty = 0.0, # Penalties for repeated tokens - 0.0
+        presence_penalty = 0.0, # Penalties for new words - 0.0
+        stop = ["#"] # when to stop generating
+    )
+    return response.choices[0].text
 
 def promt_to_code_func(query):
     if(check_if_not_null(query)):
-        prompt_fn = "Write a code for "
-        prompt = prompt_fn + query
+        prompt_fn = f"##### Write code for the below prompt\n   \n### Given Prompt\n{query}\n   \n### Code for prompt"
+        prompt = prompt_fn
         print(prompt)
-        return pass_prompt_to_ai(prompt,[0,1.0,0.2,0.0])
+        return pass_prompt_to_ai_promt_to_code_func(prompt)
     else:
         return "No Input"
+
+# ---------------------------------------------------------------------------------------------
+# Done
+def pass_prompt_to_ai_explain_code_func(prompt):
+    response = openai.Completion.create(
+        engine = "davinci-codex",
+        max_tokens = 512,
+        prompt = prompt,
+        temperature = 0, # Risk taking ability - 0
+        top_p = 1.0, # Influncing sampling - 1.0
+        frequency_penalty = 0.0, # Penalties for repeated tokens - 0.0
+        presence_penalty = 0.0, # Penalties for new words - 0.0
+        stop = ["\"\"\""] # when to stop generating
+    )
+    return response.choices[0].text
 
 def explain_code_func(query):
     if(check_if_not_null(query)):
-        prompt_fn = "\nExplain the logic of the above code\n"
+        prompt_fn = "\n\"\"\"\nHere's what the above code is doing:\n"
         prompt = query + prompt_fn
         print(prompt)
-        return pass_prompt_to_ai(prompt,[0,1.0,0.2,0.0])
+        return pass_prompt_to_ai_explain_code_func(prompt)
     else:
         return "No Input"
+    
 
-def convert_lang_func(query,to_lang):
+# ---------------------------------------------------------------------------------------------
+# Done
+def pass_prompt_to_ai_convert_lang_func(prompt):
+    response = openai.Completion.create(
+        engine = "davinci-codex",
+        max_tokens = 256,
+        prompt = prompt,
+        temperature = 0, # Risk taking ability - 0
+        top_p = 1.0, # Influncing sampling - 1.0
+        frequency_penalty = 0, # Penalties for repeated tokens - 0.0
+        presence_penalty = 0, # Penalties for new words - 0.0
+        stop = ["#"] # when to stop generating
+    )
+    return response.choices[0].text
+
+def convert_lang_func(query,inp_lang,to_lang):
     if(check_if_not_null(query)):
-        prompt_fn = f"Convert the following code to {to_lang}\n"
-        prompt = prompt_fn + query
+        prompt_fn = f"##### Translate this code from {inp_lang} into {to_lang}\n### {inp_lang}\n{query}\n### {to_lang}"
+        prompt = prompt_fn
         print(prompt)
-        return pass_prompt_to_ai(prompt,[0,1.0,0.2,0.0])
+        return pass_prompt_to_ai_convert_lang_func(prompt)
     else:
         return "No Input"
 
@@ -121,13 +183,15 @@ def update(pro_output):
 def app():
     answer = ""
     
+    inp_language = st.sidebar.selectbox('Select Input Language', LANGUAGES, index=121)
+
     with first:
         st.markdown("## Input")
         user_input = st_ace(
             value=answer,
             placeholder="Write your code or prompt here ...",
-            height=800,
-            language = st.sidebar.selectbox('Select Input Language', LANGUAGES, index=121),
+            height=600,
+            language = inp_language,
             theme = st.sidebar.selectbox('Select Editor Theme', THEMES, index=5))
 
     with second:
@@ -146,12 +210,12 @@ def app():
     # Define what happens when the button is clicked
     if fix_error_button:
         st.write('Button clicked!')
-        answer = fix_error_func(user_input)
+        answer = fix_error_func(user_input,inp_language)
         update(answer)
 
     if Optimise_code_button:
         st.write('Button clicked!')
-        answer = opt_code_func(user_input)
+        answer = opt_code_func(user_input,inp_language)
         update(answer)
 
     if Prompt_to_code_button:
@@ -167,7 +231,7 @@ def app():
 
     if Convert_lang_button:
         st.write('Button clicked!')
-        answer = convert_lang_func(user_input,to_lang)
+        answer = convert_lang_func(user_input,inp_language,to_lang)
         update(answer)
 
 def main():
