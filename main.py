@@ -27,7 +27,7 @@ def pass_prompt_to_ai_fix_error_func(prompt):
         top_p = 1.0, # Influncing sampling - 1.0
         frequency_penalty = 0.0, # Penalties for repeated tokens - 0.0
         presence_penalty = 0.0, # Penalties for new words - 0.0
-        stop = ["###"] # when to stop generating
+        stop = ["#"] # when to stop generating
     )
     return response.choices[0].text
 
