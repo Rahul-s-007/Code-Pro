@@ -186,7 +186,7 @@ def app():
     inp_language = st.sidebar.selectbox('Select Input Language', LANGUAGES, index=121)
 
     with first:
-        st.markdown("## Input")
+        st.markdown("## Input:")
         user_input = st_ace(
             value=answer,
             placeholder="Write your code or prompt here ...",
@@ -195,7 +195,7 @@ def app():
             theme = st.sidebar.selectbox('Select Editor Theme', THEMES, index=5))
 
     with second:
-        st.markdown("## Output")
+        st.markdown("## Output:")
 
     st.sidebar.title("Options")
     
