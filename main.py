@@ -20,7 +20,7 @@ def check_if_not_null(query):
 # Done
 def pass_prompt_to_ai_fix_error_func(prompt):
     response = openai.Completion.create(
-        engine = "davinci-codex",
+        engine = "code-davinci-002",
         max_tokens = 512,
         prompt = prompt,
         temperature = 0, # Risk taking ability - 0
@@ -44,7 +44,7 @@ def fix_error_func(query,inp_lang):
 # Done
 def pass_prompt_to_ai_opt_code_func(prompt):
     response = openai.Completion.create(
-        engine = "davinci-codex",
+        engine = "code-davinci-002",
         max_tokens = 512,
         prompt = prompt,
         temperature = 0, # Risk taking ability - 0
@@ -68,7 +68,7 @@ def opt_code_func(query,inp_lang):
 # Done
 def pass_prompt_to_ai_promt_to_code_func(prompt):
     response = openai.Completion.create(
-        engine = "davinci-codex",
+        engine = "code-davinci-002",
         max_tokens = 512,
         prompt = prompt,
         temperature = 0, # Risk taking ability - 0
@@ -92,7 +92,7 @@ def promt_to_code_func(query):
 # Done
 def pass_prompt_to_ai_explain_code_func(prompt):
     response = openai.Completion.create(
-        engine = "davinci-codex",
+        engine = "code-davinci-002",
         max_tokens = 512,
         prompt = prompt,
         temperature = 0, # Risk taking ability - 0
@@ -117,7 +117,7 @@ def explain_code_func(query):
 # Done
 def pass_prompt_to_ai_convert_lang_func(prompt):
     response = openai.Completion.create(
-        engine = "davinci-codex",
+        engine = "code-davinci-002",
         max_tokens = 256,
         prompt = prompt,
         temperature = 0, # Risk taking ability - 0
