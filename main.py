@@ -19,7 +19,8 @@ def check_if_not_null(query):
 # ---------------------------------------------------------------------------------------------
 # Done
 def pass_prompt_to_ai_fix_error_func(prompt):
-    response = openai.Completion.create(
+    #response = openai.Completion.create(
+    response = openai.ChatCompletion.create(
         engine = "gpt-3.5-turbo",
         max_tokens = 512,
         prompt = prompt,
@@ -43,7 +44,8 @@ def fix_error_func(query,inp_lang):
 # ---------------------------------------------------------------------------------------------
 # Done
 def pass_prompt_to_ai_opt_code_func(prompt):
-    response = openai.Completion.create(
+    #response = openai.Completion.create(
+    response = openai.ChatCompletion.create(
         engine = "gpt-3.5-turbo",
         max_tokens = 512,
         prompt = prompt,
@@ -67,7 +69,8 @@ def opt_code_func(query,inp_lang):
 # ---------------------------------------------------------------------------------------------
 # Done
 def pass_prompt_to_ai_promt_to_code_func(prompt):
-    response = openai.Completion.create(
+    #response = openai.Completion.create(
+    response = openai.ChatCompletion.create(
         engine = "gpt-3.5-turbo",
         max_tokens = 512,
         prompt = prompt,
@@ -91,7 +94,8 @@ def promt_to_code_func(query):
 # ---------------------------------------------------------------------------------------------
 # Done
 def pass_prompt_to_ai_explain_code_func(prompt):
-    response = openai.Completion.create(
+    #response = openai.Completion.create(
+    response = openai.ChatCompletion.create(
         engine = "gpt-3.5-turbo",
         max_tokens = 512,
         prompt = prompt,
@@ -116,7 +120,8 @@ def explain_code_func(query):
 # ---------------------------------------------------------------------------------------------
 # Done
 def pass_prompt_to_ai_convert_lang_func(prompt):
-    response = openai.Completion.create(
+    #response = openai.Completion.create(
+    response = openai.ChatCompletion.create(
         engine = "gpt-3.5-turbo",
         max_tokens = 256,
         prompt = prompt,
