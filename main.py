@@ -199,7 +199,7 @@ def app():
     with second:
         st.markdown("## Output:")
 
-    st.sidebar.divider()
+    # st.sidebar.divider()
     
     st.sidebar.title("Options:")
     
@@ -211,11 +211,11 @@ def app():
     to_lang = st.sidebar.selectbox('Convert to', LANGUAGES, index=68)
     Convert_lang_button = st.sidebar.button('Convert Code')
 
-    st.sidebar.divider()
+    # st.sidebar.divider()
     
     st.sidebar.success("Press  $APPLY$  button below the input box before choosing the options") # __<text>__ OR **<text>** for BOLD
     
-    st.sidebar.divider()
+    # st.sidebar.divider()
 
 # ---------------------------------------------------------------------------------------------
 # Page View Counts
