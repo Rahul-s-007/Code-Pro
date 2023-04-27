@@ -8,6 +8,12 @@ import openai
 import streamlit as st
 from streamlit_ace import st_ace
 
+import streamlit_analytics
+import json
+
+streamlit_analytics.start_tracking(load_from_json="view.json")
+# your streamlit code here
+
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 def check_if_not_null(query):
@@ -19,18 +25,16 @@ def check_if_not_null(query):
 # ---------------------------------------------------------------------------------------------
 # Done
 def pass_prompt_to_ai_fix_error_func(prompt):
-    #response = openai.Completion.create(
+    agent = """You are a helpful and experienced software engineer who is expert in fixing errors and bugs in code.
+You also provide short explantion of the errors that occoured."""
+
     response = openai.ChatCompletion.create(
-        engine = "gpt-3.5-turbo",
-        max_tokens = 512,
-        prompt = prompt,
-        temperature = 0, # Risk taking ability - 0
-        top_p = 1.0, # Influncing sampling - 1.0
-        frequency_penalty = 0.0, # Penalties for repeated tokens - 0.0
-        presence_penalty = 0.0, # Penalties for new words - 0.0
-        stop = ["#"] # when to stop generating
-    )
-    return response.choices[0].text
+                model="gpt-3.5-turbo",
+                messages=[{"role": "system", "content": agent},
+                         {"role": "user", "content": prompt}]
+                )
+    
+    return response['choices'][0]['message']['content']
 
 def fix_error_func(query,inp_lang):
     if(check_if_not_null(query)):
@@ -41,21 +45,21 @@ def fix_error_func(query,inp_lang):
     else:
         return "No Input"
 
+
 # ---------------------------------------------------------------------------------------------
 # Done
 def pass_prompt_to_ai_opt_code_func(prompt):
-    #response = openai.Completion.create(
+    agent = """You are a helpful and experienced software engineer who is expert in optimising the time complexity and space complexity of code.
+You also provide short explantion of how you optimised it."""
+
     response = openai.ChatCompletion.create(
-        engine = "gpt-3.5-turbo",
-        max_tokens = 512,
-        prompt = prompt,
-        temperature = 0, # Risk taking ability - 0
-        top_p = 1.0, # Influncing sampling - 1.0
-        frequency_penalty = 0.0, # Penalties for repeated tokens - 0.0
-        presence_penalty = 0.0, # Penalties for new words - 0.0
-        stop = ["#"] # when to stop generating
-    )
-    return response.choices[0].text
+                model="gpt-3.5-turbo",
+                messages=[{"role": "system", "content": agent},
+                         {"role": "user", "content": prompt}]
+                )
+    
+    return response['choices'][0]['message']['content']
+
 
 def opt_code_func(query,inp_lang):
     if(check_if_not_null(query)):
@@ -69,18 +73,16 @@ def opt_code_func(query,inp_lang):
 # ---------------------------------------------------------------------------------------------
 # Done
 def pass_prompt_to_ai_promt_to_code_func(prompt):
-    #response = openai.Completion.create(
+    agent = """You are a helpful and experienced software engineer who is expert in writting clean, and error free code.
+You also provide short explantion of how the code was implemented."""
+
     response = openai.ChatCompletion.create(
-        engine = "gpt-3.5-turbo",
-        max_tokens = 512,
-        prompt = prompt,
-        temperature = 0, # Risk taking ability - 0
-        top_p = 1.0, # Influncing sampling - 1.0
-        frequency_penalty = 0.0, # Penalties for repeated tokens - 0.0
-        presence_penalty = 0.0, # Penalties for new words - 0.0
-        stop = ["#"] # when to stop generating
-    )
-    return response.choices[0].text
+                model="gpt-3.5-turbo",
+                messages=[{"role": "system", "content": agent},
+                         {"role": "user", "content": prompt}]
+                )
+    
+    return response['choices'][0]['message']['content']
 
 def promt_to_code_func(query):
     if(check_if_not_null(query)):
@@ -94,18 +96,15 @@ def promt_to_code_func(query):
 # ---------------------------------------------------------------------------------------------
 # Done
 def pass_prompt_to_ai_explain_code_func(prompt):
-    #response = openai.Completion.create(
+    agent = """You are a helpful and experienced software engineer who is expert in explaning complex code in easy to understand terms."""
+
     response = openai.ChatCompletion.create(
-        engine = "gpt-3.5-turbo",
-        max_tokens = 512,
-        prompt = prompt,
-        temperature = 0, # Risk taking ability - 0
-        top_p = 1.0, # Influncing sampling - 1.0
-        frequency_penalty = 0.0, # Penalties for repeated tokens - 0.0
-        presence_penalty = 0.0, # Penalties for new words - 0.0
-        stop = ["\"\"\""] # when to stop generating
-    )
-    return response.choices[0].text
+                model="gpt-3.5-turbo",
+                messages=[{"role": "system", "content": agent},
+                         {"role": "user", "content": prompt}]
+                )
+    
+    return response['choices'][0]['message']['content']
 
 def explain_code_func(query):
     if(check_if_not_null(query)):
@@ -120,18 +119,16 @@ def explain_code_func(query):
 # ---------------------------------------------------------------------------------------------
 # Done
 def pass_prompt_to_ai_convert_lang_func(prompt):
-    #response = openai.Completion.create(
+    agent = """You are a helpful and experienced software engineer who is expert converting code from one programming language to other.
+You also add appropriate comments to the converted code"""
+
     response = openai.ChatCompletion.create(
-        engine = "gpt-3.5-turbo",
-        max_tokens = 256,
-        prompt = prompt,
-        temperature = 0, # Risk taking ability - 0
-        top_p = 1.0, # Influncing sampling - 1.0
-        frequency_penalty = 0, # Penalties for repeated tokens - 0.0
-        presence_penalty = 0, # Penalties for new words - 0.0
-        stop = ["#"] # when to stop generating
-    )
-    return response.choices[0].text
+                model="gpt-3.5-turbo",
+                messages=[{"role": "system", "content": agent},
+                         {"role": "user", "content": prompt}]
+                )
+    
+    return response['choices'][0]['message']['content']
 
 def convert_lang_func(query,inp_lang,to_lang):
     if(check_if_not_null(query)):
@@ -202,7 +199,9 @@ def app():
     with second:
         st.markdown("## Output:")
 
-    st.sidebar.title("Options")
+    st.sidebar.divider()
+    
+    st.sidebar.title("Options:")
     
     fix_error_button = st.sidebar.button('Fix Errors')
     Optimise_code_button = st.sidebar.button('Optimise Code')
@@ -211,6 +210,33 @@ def app():
 
     to_lang = st.sidebar.selectbox('Convert to', LANGUAGES, index=68)
     Convert_lang_button = st.sidebar.button('Convert Code')
+
+    st.sidebar.divider()
+    
+    st.sidebar.success("Press  $APPLY$  button below the input box before choosing the options") # __<text>__ OR **<text>** for BOLD
+    
+    st.sidebar.divider()
+
+# ---------------------------------------------------------------------------------------------
+# Page View Counts
+    with open('view.json') as json_file:
+        viewer_data = json.load(json_file)
+    total_views = viewer_data["total_pageviews"]
+    total_script_runs = viewer_data["total_script_runs"]
+    total_time = int(viewer_data["total_time_seconds"])
+
+    day = total_time // (24 * 3600)
+    time = total_time % (24 * 3600)
+    hour = total_time // 3600
+    total_time %= 3600
+    minutes = total_time // 60
+    total_time %= 60
+    seconds = total_time
+    
+    st.sidebar.write(f"Total Page Visits:\n{total_views}")
+    st.sidebar.write(f"Total Page Re-Runs:\n{total_script_runs}")
+    st.sidebar.write(f"Total Time Spent:\n {day} days {hour} hours {minutes} minutes {seconds} seconds")
+# ---------------------------------------------------------------------------------------------
 
     # Define what happens when the button is clicked
     if fix_error_button:
@@ -244,3 +270,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    streamlit_analytics.stop_tracking(save_to_json="view.json")
